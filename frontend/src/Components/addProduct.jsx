@@ -1,87 +1,50 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const AddProduct = () => {
-  const router = useNavigate();
+    const [userProduct, setUserProduct] = useState({ name: "", price: "", image: "" });
+    const router = useNavigate();
 
-  //*Product Data
-  const [product, setProduct] = useState({
-    name: "",
-    image: "",
-    price: 0,
-  });
-
-  const handelChange = (event) => {
-    setProduct({ ...product, [event.target.name]: event.target.value });
-  };
-
-  const submitProduct = async (event) => {
-    event.preventDefault();
-
-    // console.log(product);
-    const response = await axios.post(
-      "http://localhost:8000/addProduct",
-      {
-        productName: product.name,
-        Image: product.image,
-        Price: product.price,
-      }
-    );
-
-    if (response.data.status === 200) {
-      alert(response.data.message);
-      setProduct({ productName: "", image: "", price: 0 });
-      router("/");
-    } else if (response.data.status === 400) {
-      alert(response.data.message);
+    const handleChange = (event) => {
+        setUserProduct({ ...userProduct, [event.target.name]: event.target.value })
     }
-  };
 
-  return (
-    <>
-      <div onSubmit={submitProduct}>
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        if (userProduct.name && userProduct.price && userProduct.image) {
+            const response = await axios.post("http://localhost:8000/addProduct", {
+                name: userProduct.name,
+                email: userProduct.price,
+                password: userProduct.image
+            })
+            console.log(response, "- response")
+            if (response.data.status == 200) {
+                alert(response.data.message)
+            } else {
+                alert("Error..")
+            }
+        } else {
+            alert("Please fill all the fields.")
+        }
+
+    }
+
+    return (
         <div>
-          <h1>Add Product</h1>
-          <form  onSubmit={onsubmit}>
-            <div>
-              <label>Product Name</label>
-              <input
-                type="text"
-                placeholder="Product Name"
-                name="name"
-                onChange={handelChange}
-              />
-            </div>
-
-            <div>
-              <label>Image</label>
-              <input
-                type="text"
-                placeholder="Image Url"
-                name="image"
-                onChange={handelChange}
-              />
-            </div>
-
-            <div >
-              <label>Price</label>
-              <input
-                type="number"
-                placeholder="Price"
-                name="price"
-                onChange={handelChange}
-              />
-            </div>
-
-            <div >
-              <input type="submit" value="submit" />
-            </div>
-          </form>
+            <h1>Register</h1>
+            <form onSubmit={handleSubmit}>
+                <label>Name</label><br />
+                <input onChange={handleChange} type='text' name="name" value={userProduct.name} /><br />
+                <label>Price</label><br />
+                <input onChange={handleChange} type='number' name="price" value={userProduct.price} /><br />
+                <label>Image</label><br />
+                <input onChange={handleChange} type='text' name="image" value={userProduct.image} /><br />
+                <input type='submit' value='AddProduct' /><br />
+            </form>
         </div>
-      </div>
-    </>
-  );
-};
+    )
+}
 
-export default AddProduct;
+export default AddProduct
