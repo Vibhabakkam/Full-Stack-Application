@@ -1,6 +1,6 @@
-import Product from "../Model/Product.Schema";
+import Product from "../Model/Product.Schema.js";
 
- export const allProduct = async (req,res) => {
+ export const addProduct = async (req,res) => {
     try {
         const {name, price, image } = req.body;
         if(!name || !price || !image) return res.send("All filled are Required");
