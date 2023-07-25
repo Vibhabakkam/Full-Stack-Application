@@ -1,50 +1,50 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from 'axios'
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const AddProduct = () => {
-    const [userProduct, setUserProduct] = useState({ name: "", price: "", image: "" });
-    const router = useNavigate();
+  const [userProduct, setUserProduct] = useState({ name: "", image: "", price: "" })
+  const router = useNavigate()
+  const handleChange = (event) => {
+    setUserProduct({ ...userProduct, [event.target.name]: event.target.value })
+  }
 
-    const handleChange = (event) => {
-        setUserProduct({ ...userProduct, [event.target.name]: event.target.value })
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (userProduct.name && userProduct.image && userProduct.price) {
+      const response = await axios.post("http://localhost:8000/add-product", {
+        name: userProduct.name,
+        image: userProduct.image,
+        price: userProduct.price
+      });
+      if (response.data.status == 200) {
+        setUserProduct({ name: "", image: "", price: "" })
+        router('/allproduct');
+        alert("Product added successfully.")
+      } else {
+        alert("Error please try again..")
+      }
+    } else {
+      alert("Please fill the all fields..")
     }
+  }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-
-        if (userProduct.name && userProduct.price && userProduct.image) {
-            const response = await axios.post("http://localhost:8000/addProduct", {
-                name: userProduct.name,
-                email: userProduct.price,
-                password: userProduct.image
-            })
-            console.log(response, "- response")
-            if (response.data.status == 200) {
-                alert(response.data.message)
-            } else {
-                alert("Error..")
-            }
-        } else {
-            alert("Please fill all the fields.")
-        }
-
-    }
-
-    return (
-        <div>
-            <h1>Register</h1>
-            <form onSubmit={handleSubmit}>
-                <label>Name</label><br />
-                <input onChange={handleChange} type='text' name="name" value={userProduct.name} /><br />
-                <label>Price</label><br />
-                <input onChange={handleChange} type='number' name="price" value={userProduct.price} /><br />
-                <label>Image</label><br />
-                <input onChange={handleChange} type='text' name="image" value={userProduct.image} /><br />
-                <input type='submit' value='AddProduct' /><br />
-            </form>
-        </div>
-    )
+  return (
+    <div style={{display:"flex" , justifyContent:"center" , alignItems:"center"}}>
+        <div style={{border:"2px solid black" , height:"400px" , width:"400px" , display:"flex" , flexDirection:"column" , justifyContent:"center" , alignItems:"center" , marginTop:"100px"}}>
+      <h1>Add Products </h1> 
+      <form onSubmit={handleSubmit}>
+        <label>Name </label><br />
+        <input onChange={handleChange} type='text' name='name' /><br />
+        <label>Price </label><br />
+        <input onChange={handleChange} type='number' name='price' /><br />
+        <label>Image </label><br />
+        <input onChange={handleChange} type='text' name='image' /><br />
+        <input type='submit' value="Add Product" /><br />
+      </form>
+      </div>
+    </div>
+  )
 }
 
 export default AddProduct

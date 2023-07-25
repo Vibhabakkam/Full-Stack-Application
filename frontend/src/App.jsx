@@ -4,6 +4,7 @@ import Home from "./Components/Home";
 import Register from "./Components/Register";
 import Login from "./Components/Login";
 import AddProduct from "./Components/addProduct";
+import AllProducts from "./Components/AllProducts";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Route exact path='/register' element = {<Register/>}/>
       <Route exact path='/login' element = {<Login/>}/>
       <Route exact path='/addProduct' element = {<AddProduct/>}/>
+      <Route exact path='/allProduct' element = {<AllProducts/>}/>
     </Routes>
   );
 }
